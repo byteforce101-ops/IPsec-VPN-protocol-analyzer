@@ -153,9 +153,14 @@ export default function AuraShieldVPNApp() {
   const [dragOver, setDragOver] = useState(false)
 
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/')
-      .then((res) => { if (res.ok) setApiHealth('online'); else setApiHealth('offline') })
-      .catch(() => setApiHealth('offline'))
+    const checkHealth = () => {
+      fetch('http://127.0.0.1:8000/')
+        .then((res) => { if (res.ok) setApiHealth('online'); else setApiHealth('offline') })
+        .catch(() => setApiHealth('offline'))
+    }
+    checkHealth()
+    const interval = setInterval(checkHealth, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   const triggerToast = (msg: string) => {
@@ -181,11 +186,16 @@ export default function AuraShieldVPNApp() {
       const data: ScanResult = await response.json()
       setScanResult(data)
       setIsUploading(false)
+      setApiHealth('online')
       triggerToast(`✓ Analysis Complete — ${data.score}/100 Score (${data.grade})`)
       setActivePage('findings')
     } catch (err: any) {
       setIsUploading(false)
-      setUploadError(err.message || 'Cannot connect to backend. Run start_backend.bat first.')
+      setApiHealth('offline')
+      const msg = err.message === 'Failed to fetch'
+        ? 'Backend API is offline (http://127.0.0.1:8000). Please launch the backend server using start_backend.bat or python backend/main.py.'
+        : (err.message || 'Cannot connect to backend. Run start_backend.bat first.')
+      setUploadError(msg)
     }
   }
 
