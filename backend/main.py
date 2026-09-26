@@ -1,7 +1,7 @@
 """
 IPsec Analyzer - FastAPI Backend Application
 Handles file uploads, protocol/config parsing, security rule auditing,
-Gemini AI assessment, scoring, and PDF report delivery.
+AI assessment, scoring, and PDF report delivery.
 """
 
 import os
@@ -27,8 +27,8 @@ from reports.pdf_generator import REPORTS_DIR, generate_pdf
 load_dotenv()
 
 app = FastAPI(
-    title="IPsec Analyzer API",
-    description="Automated IPsec configuration and packet capture security auditor with AI assessment",
+    title="Cipher Lens API",
+    description="Automated AI-driven IPsec VPN configuration & packet capture security auditor",
     version="1.0.0",
 )
 
@@ -51,7 +51,7 @@ app.add_middleware(
 def health_check():
     return {
         "status": "online",
-        "service": "IPsec Analyzer API",
+        "service": "Cipher Lens API",
         "timestamp": datetime.now().isoformat(),
     }
 
@@ -63,7 +63,7 @@ async def analyze_file(
 ):
     """
     Analyzes an uploaded IPsec VPN configuration or packet capture file (.conf, .cfg, .txt, .pcap, .pcapng).
-    Returns findings, security score, grade, and AI executive summary.
+    Returns protocol parameters, findings, security score, grade, and AI traffic classification.
     """
     filename = file.filename or "uploaded_file"
     ext = os.path.splitext(filename)[1].lower()
@@ -97,7 +97,7 @@ async def analyze_file(
         # 3. Calculate score & grade
         score, grade, severity_counts = calculate_score(findings)
 
-        # 4. Enrich with Gemini AI assessment
+        # 4. Enrich with AI assessment
         ai_data = generate_ai_assessment(
             findings=findings,
             filename=filename,
@@ -121,6 +121,8 @@ async def analyze_file(
             "grade": grade,
             "severityCounts": severity_counts,
             "aiSummary": ai_summary,
+            "mode": parsed_data.get("mode", "Tunnel Mode"),
+            "parameters": parsed_data.get("parameters", {}),
             "aiTrafficAnalysis": parsed_data.get("aiTrafficAnalysis", {}),
             "findings": enriched_findings,
             "technicalDetails": parsed_data.get("technical_snippet", ""),
@@ -163,5 +165,23 @@ async def get_report_pdf(report_id: str):
 
 
 if __name__ == "__main__":
+    import socket
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+
+    def _find_free_port(preferred: int, host: str = "127.0.0.1") -> int:
+        """Return `preferred` if it's free, otherwise the next available port."""
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            try:
+                s.bind((host, preferred))
+                return preferred
+            except OSError:
+                # Port is taken — let the OS pick a free one
+                s.bind((host, 0))
+                return s.getsockname()[1]
+
+    PORT = int(os.getenv("PORT", 8000))
+    port = _find_free_port(PORT)
+    if port != PORT:
+        print(f"[Warning] Port {PORT} is already in use. Starting on port {port} instead.")
+    print(f"[INFO] Starting server on http://127.0.0.1:{port}")
+    uvicorn.run(app, host="127.0.0.1", port=port)

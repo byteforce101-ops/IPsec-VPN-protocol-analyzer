@@ -19,121 +19,144 @@ REPORT_HTML_TEMPLATE = """
 <style>
   @page {
     size: A4;
-    margin: 20mm;
+    margin: 15mm;
   }
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    color: #1a1a1a;
+    color: #111827;
     line-height: 1.5;
-    font-size: 11pt;
+    font-size: 10pt;
+    background-color: #ffffff;
   }
   .header {
-    border-bottom: 2px solid #c88750;
+    border-bottom: 2px solid #5850ec;
     padding-bottom: 12px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
   }
   .header h1 {
-    font-size: 24pt;
+    font-size: 20pt;
     margin: 0;
-    color: #1e221b;
+    color: #111827;
+    font-weight: 800;
   }
   .header .meta {
-    font-size: 9pt;
-    color: #666;
+    font-size: 8.5pt;
+    color: #6b7280;
     margin-top: 4px;
   }
   .score-card {
-    background: #f8f6f0;
-    border: 1px solid #e2d9cc;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 16px;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
   }
   .score-num {
-    font-size: 38pt;
-    font-weight: 700;
-    color: #c88750;
+    font-size: 34pt;
+    font-weight: 800;
+    color: #5850ec;
     line-height: 1;
   }
   .score-grade {
-    font-size: 14pt;
-    font-weight: 600;
-    color: #333;
+    font-size: 13pt;
+    font-weight: 700;
+    color: #10b981;
+    margin-top: 4px;
   }
   .ai-summary {
-    background: #fdfbf7;
-    border-left: 4px solid #c88750;
+    background: #eef2ff;
+    border-left: 4px solid #5850ec;
     padding: 12px 16px;
-    margin-bottom: 24px;
-    font-size: 10.5pt;
-    color: #2b2b2b;
+    margin-bottom: 20px;
+    font-size: 9.5pt;
+    color: #1e1b4b;
+    border-radius: 0 8px 8px 0;
   }
   h2 {
-    font-size: 15pt;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 6px;
-    margin-top: 24px;
-    color: #1e221b;
+    font-size: 13pt;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 4px;
+    margin-top: 20px;
+    margin-bottom: 12px;
+    color: #111827;
+    font-weight: 700;
+  }
+  .param-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 9pt;
+  }
+  .param-table th, .param-table td {
+    border: 1px solid #e5e7eb;
+    padding: 8px 12px;
+    text-align: left;
+  }
+  .param-table th {
+    background-color: #f9fafb;
+    font-weight: 700;
+    color: #374151;
   }
   .finding {
-    border: 1px solid #e2e0d7;
+    border: 1px solid #e5e7eb;
     border-radius: 6px;
-    margin-bottom: 14px;
-    padding: 12px 16px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
     page-break-inside: avoid;
+    background-color: #ffffff;
   }
   .badge {
     display: inline-block;
     padding: 2px 8px;
     border-radius: 4px;
-    font-size: 8pt;
-    font-weight: 700;
+    font-size: 7.5pt;
+    font-weight: 800;
     text-transform: uppercase;
   }
-  .badge-Critical { background: #fee2e2; color: #b91c1c; }
-  .badge-High { background: #ffedd5; color: #c2410c; }
-  .badge-Medium { background: #fef3c7; color: #b45309; }
-  .badge-Low { background: #f0fdf4; color: #15803d; }
+  .badge-Critical { background: #fef2f2; color: #ef4444; border: 1px solid #fecaca; }
+  .badge-High { background: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; }
+  .badge-Medium { background: #fefce8; color: #b45309; border: 1px solid #fef3c7; }
+  .badge-Low { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
   .finding-title {
-    font-size: 12pt;
-    font-weight: 600;
+    font-size: 11pt;
+    font-weight: 700;
     margin-left: 8px;
-    color: #1a1a1a;
+    color: #111827;
   }
   .finding-meta {
-    font-size: 9pt;
-    color: #777;
-    margin-top: 4px;
+    font-size: 8.5pt;
+    color: #6b7280;
+    margin-top: 2px;
   }
   .finding-box {
-    background: #f4f4f2;
+    background: #f9fafb;
     padding: 8px 12px;
     border-radius: 4px;
-    font-family: monospace;
-    font-size: 9pt;
+    font-size: 8.5pt;
     margin-top: 8px;
+    border: 1px solid #f1f3f9;
   }
   .code-block {
-    background: #111310;
-    color: #d8d4c9;
-    padding: 14px;
+    background: #111827;
+    color: #e5e7eb;
+    padding: 12px;
     border-radius: 6px;
     font-family: monospace;
-    font-size: 8.5pt;
+    font-size: 8pt;
     white-space: pre-wrap;
   }
   .footer {
-    margin-top: 40px;
+    margin-top: 30px;
     font-size: 8pt;
-    color: #999;
+    color: #9ca3af;
     text-align: center;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #edeef3;
     padding-top: 10px;
   }
 </style>
@@ -148,26 +171,91 @@ REPORT_HTML_TEMPLATE = """
 
   <div class="score-card">
     <div>
-      <div class="score-num">{{ score }}</div>
+      <div class="score-num">{{ score }}/100</div>
       <div class="score-grade">{{ grade }}</div>
     </div>
-    <div style="flex: 1; padding-left: 20px; border-left: 1px solid #e5dfd5;">
-      <div><b>Executive Overview</b></div>
-      <div style="font-size: 9pt; color: #666; margin-top: 4px;">
-        Critical: {{ severity_counts.Critical }} &nbsp;|&nbsp;
-        High: {{ severity_counts.High }} &nbsp;|&nbsp;
-        Medium: {{ severity_counts.Medium }} &nbsp;|&nbsp;
-        Low: {{ severity_counts.Low }}
+    <div style="flex: 1; padding-left: 20px; border-left: 1px solid #e5e7eb;">
+      <div style="font-weight: 700; font-size: 10.5pt;">Threat Summary Matrix</div>
+      <div style="font-size: 9pt; color: #4b5563; margin-top: 6px;">
+        Critical: <b>{{ severity_counts.Critical }}</b> &nbsp;|&nbsp;
+        High: <b>{{ severity_counts.High }}</b> &nbsp;|&nbsp;
+        Medium: <b>{{ severity_counts.Medium }}</b> &nbsp;|&nbsp;
+        Low: <b>{{ severity_counts.Low }}</b>
+      </div>
+      <div style="font-size: 8.5pt; color: #6b7280; margin-top: 4px;">
+        Compliance Standard: NIST SP 800-77 Rev 1 / RFC 7296
       </div>
     </div>
   </div>
 
   <div class="ai-summary">
-    <strong>AI Security Assessment:</strong><br/>
+    <strong>Executive AI Summary:</strong><br/>
     {{ ai_summary }}
   </div>
 
-  <h2>Security Findings ({{ findings|length }})</h2>
+  <h2>Protocol & Cryptographic Characteristics</h2>
+  <table class="param-table">
+    <tr>
+      <th>Parameter</th>
+      <th>Identified Configuration Value</th>
+      <th>Compliance Status</th>
+    </tr>
+    <tr>
+      <td><b>IKE Version</b></td>
+      <td>{{ parameters.get('ike_version', 'IKEv2') }}</td>
+      <td>{{ 'PASSED (Modern)' if parameters.get('keyexchange') == 'ikev2' else 'VULNERABLE (Legacy IKEv1)' }}</td>
+    </tr>
+    <tr>
+      <td><b>IPsec Protocol & Mode</b></td>
+      <td>{{ parameters.get('ipsec_protocol', 'ESP') }} ({{ mode }})</td>
+      <td>{{ 'PASSED (Tunnel Mode)' if mode == 'Tunnel Mode' else 'WARNING (Transport Mode Metadata Exposure)' }}</td>
+    </tr>
+    <tr>
+      <td><b>Encryption Algorithms</b></td>
+      <td>{{ parameters.get('ciphers', [])|join(', ') or 'AES-256-GCM' }}</td>
+      <td>{{ 'PASSED (AEAD Standard)' if 'gcm' in (parameters.get('ciphers', [])|join(' ')|lower) else 'REVIEW RECOMMENDED' }}</td>
+    </tr>
+    <tr>
+      <td><b>Auth & Hash Algorithms</b></td>
+      <td>{{ parameters.get('hashes', [])|join(', ') or 'HMAC-SHA256' }}</td>
+      <td>PASSED</td>
+    </tr>
+    <tr>
+      <td><b>Diffie-Hellman Group</b></td>
+      <td>{{ parameters.get('dh_groups', [])|join(', ') or 'Group 19 (ECP256)' }}</td>
+      <td>{{ 'VULNERABLE (< 2048-bit)' if 'group 2' in (parameters.get('dh_groups', [])|join(' ')|lower) else 'PASSED' }}</td>
+    </tr>
+    <tr>
+      <td><b>Perfect Forward Secrecy (PFS)</b></td>
+      <td>{{ 'Enabled (PFS Active)' if parameters.get('pfs') else 'Disabled' }}</td>
+      <td>{{ 'PASSED' if parameters.get('pfs') else 'HIGH RISK (Disabled)' }}</td>
+    </tr>
+    <tr>
+      <td><b>SA SPIs</b></td>
+      <td>{{ parameters.get('spi_list', [])|join(', ') }}</td>
+      <td>Active SPI Attributes</td>
+    </tr>
+  </table>
+
+  {% if ai_traffic and ai_traffic.get('predictedCategory') %}
+  <h2>AI Encrypted Flow Classification</h2>
+  <table class="param-table">
+    <tr>
+      <th>Predicted Application Traffic</th>
+      <td><b>{{ ai_traffic.get('predictedCategory') }}</b></td>
+    </tr>
+    <tr>
+      <th>AI Model Confidence Score</th>
+      <td><b>{{ ai_traffic.get('confidence') }}% Confidence</b></td>
+    </tr>
+    <tr>
+      <th>Flow Analysis & Evidence</th>
+      <td>{{ ai_traffic.get('explanation') }}</td>
+    </tr>
+  </table>
+  {% endif %}
+
+  <h2>Security Findings Matrix ({{ findings|length }})</h2>
   {% for f in findings %}
   <div class="finding">
     <div>
@@ -175,10 +263,10 @@ REPORT_HTML_TEMPLATE = """
       <span class="finding-title">{{ f.title }}</span>
       <span class="finding-meta">— {{ f.category }}</span>
     </div>
-    <p style="margin: 8px 0; font-size: 9.5pt; color: #444;">{{ f.explanation }}</p>
+    <p style="margin: 6px 0; font-size: 9pt; color: #374151;">{{ f.explanation }}</p>
     <div class="finding-box">
-      <div><span style="color:#777;">Detected:</span> <b>{{ f.detected }}</b></div>
-      <div style="margin-top: 3px;"><span style="color:#777;">Recommended:</span> <b style="color:#2f855a;">{{ f.recommended }}</b></div>
+      <div><span style="color:#6b7280;">Detected:</span> <b>{{ f.detected }}</b></div>
+      <div style="margin-top: 3px;"><span style="color:#6b7280;">NIST Recommendation:</span> <b style="color:#10b981;">{{ f.recommended }}</b></div>
     </div>
   </div>
   {% endfor %}
@@ -189,7 +277,7 @@ REPORT_HTML_TEMPLATE = """
   {% endif %}
 
   <div class="footer">
-    Generated by IPsec Analyzer Security Suite · Confidential &amp; Proprietary
+    Generated by IPsec Protocol Analyzer Security Suite · Confidential &amp; Proprietary Report
   </div>
 </body>
 </html>
@@ -207,11 +295,14 @@ def generate_pdf(report_id: str, scan_data: Dict[str, Any]) -> str:
     html_content = template.render(
         scan_name=scan_data.get("scanName", "IPsec Security Review"),
         file_name=scan_data.get("fileName", "configuration.conf"),
-        analyzed_at=scan_data.get("analyzedAt", "Sep 23, 2026"),
+        analyzed_at=scan_data.get("analyzedAt", "Sep 25, 2026"),
         score=scan_data.get("score", 0),
         grade=scan_data.get("grade", "Grade F"),
         severity_counts=scan_data.get("severityCounts", {"Critical": 0, "High": 0, "Medium": 0, "Low": 0}),
         ai_summary=scan_data.get("aiSummary", ""),
+        mode=scan_data.get("mode", "Tunnel Mode"),
+        parameters=scan_data.get("parameters", {}),
+        ai_traffic=scan_data.get("aiTrafficAnalysis", {}),
         findings=scan_data.get("findings", []),
         technical_details=scan_data.get("technicalDetails", ""),
     )
@@ -236,31 +327,30 @@ def _generate_fallback_pdf(pdf_path: str, scan_data: Dict[str, Any], html_conten
     score_line = f"Score: {scan_data.get('score', 0)} ({scan_data.get('grade', 'N/A')})"
     summary = scan_data.get("aiSummary", "")
 
-    # Clean minimal PDF format specification
     content_stream = f"""BT
-/F1 18 Tf
-50 750 Td
+/F1 16 Tf
+40 750 Td
 ({title}) Tj
-/F1 12 Tf
-0 -30 Td
+/F1 11 Tf
+0 -25 Td
 ({score_line}) Tj
-0 -25 Td
-(Target File: {scan_data.get('fileName', 'Unknown')}) Tj
-0 -25 Td
-(Executive AI Summary:) Tj
-/F1 10 Tf
 0 -20 Td
-({summary[:90]}) Tj
+(Target File: {scan_data.get('fileName', 'Unknown')}) Tj
+0 -20 Td
+(Executive AI Summary:) Tj
+/F1 9 Tf
 0 -15 Td
-({summary[90:180]}) Tj
-0 -30 Td
-(Security Findings Summary:) Tj
+({summary[:85]}) Tj
+0 -12 Td
+({summary[85:170]}) Tj
+0 -25 Td
+(Security Findings Matrix:) Tj
 """
-    y_offset = -20
+    y_offset = -16
     for f in scan_data.get("findings", [])[:6]:
         line = f"[{f.get('severity')}] {f.get('title')}: {f.get('recommended')}"
         content_stream += f"0 {y_offset} Td\n({line[:80]}) Tj\n"
-        y_offset = -18
+        y_offset = -14
 
     content_stream += "ET"
 

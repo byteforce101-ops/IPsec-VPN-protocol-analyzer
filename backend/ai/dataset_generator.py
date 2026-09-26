@@ -1,10 +1,12 @@
 """
 Dataset Generator for IPsec Encrypted Traffic Classification using Standard Python CSV.
 Generates structured training data based on flow statistics (packet size distributions,
-burst dynamics, packet counts, and flow duration) across 5 traffic categories:
+burst dynamics, packet counts, and flow duration) across 7 traffic categories:
 - Web (HTTP/HTTPS browsing)
 - Video (Streaming media e.g. YouTube/Netflix)
 - VoIP (Voice over IP calls e.g. Zoom/Teams audio)
+- WhatsApp (Instant messaging small burst traffic)
+- Email (SMTP/IMAP background sync & attachments)
 - FileTransfer (FTP/SFTP/Large downloads)
 - ICMP (Ping/Keep-alive control traffic)
 """
@@ -35,30 +37,40 @@ FIELDNAMES = [
 def generate_flow_features(traffic_type: str) -> dict:
     """Generates realistic statistical features for a specific traffic category."""
     if traffic_type == "Web":
-        packet_count = random.randint(15, 120)
-        sizes = [random.randint(64, 200) for _ in range(int(packet_count * 0.4))] + \
+        packet_count = random.randint(15, 150)
+        sizes = [random.randint(64, 250) for _ in range(int(packet_count * 0.4))] + \
                 [random.randint(800, 1460) for _ in range(int(packet_count * 0.6))]
-        duration = random.uniform(1.5, 15.0)
+        duration = random.uniform(1.5, 20.0)
 
     elif traffic_type == "Video":
-        packet_count = random.randint(200, 1500)
+        packet_count = random.randint(250, 2000)
         sizes = [random.randint(1100, 1480) for _ in range(packet_count)]
         duration = random.uniform(10.0, 120.0)
 
     elif traffic_type == "VoIP":
-        packet_count = random.randint(100, 800)
-        sizes = [random.randint(140, 260) for _ in range(packet_count)]
+        packet_count = random.randint(100, 1000)
+        sizes = [random.randint(140, 280) for _ in range(packet_count)]
         duration = random.uniform(5.0, 60.0)
 
+    elif traffic_type == "WhatsApp":
+        packet_count = random.randint(10, 80)
+        sizes = [random.randint(64, 320) for _ in range(packet_count)]
+        duration = random.uniform(1.0, 15.0)
+
+    elif traffic_type == "Email":
+        packet_count = random.randint(20, 120)
+        sizes = [random.randint(200, 900) for _ in range(packet_count)]
+        duration = random.uniform(2.0, 25.0)
+
     elif traffic_type == "FileTransfer":
-        packet_count = random.randint(300, 3000)
+        packet_count = random.randint(400, 3500)
         sizes = [random.randint(1400, 1500) for _ in range(packet_count)]
         duration = random.uniform(5.0, 90.0)
 
     elif traffic_type == "ICMP":
-        packet_count = random.randint(5, 50)
+        packet_count = random.randint(5, 60)
         sizes = [random.randint(64, 128) for _ in range(packet_count)]
-        duration = random.uniform(1.0, 20.0)
+        duration = random.uniform(1.0, 30.0)
 
     else:
         packet_count = random.randint(10, 100)
@@ -84,8 +96,8 @@ def generate_flow_features(traffic_type: str) -> dict:
     }
 
 
-def generate_dataset(num_samples: int = 1500) -> str:
-    categories = ["Web", "Video", "VoIP", "FileTransfer", "ICMP"]
+def generate_dataset(num_samples: int = 2100) -> str:
+    categories = ["Web", "Video", "VoIP", "WhatsApp", "Email", "FileTransfer", "ICMP"]
     rows = []
 
     for _ in range(num_samples):

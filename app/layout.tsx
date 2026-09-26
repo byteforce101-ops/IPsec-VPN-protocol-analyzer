@@ -3,34 +3,17 @@ import type { Metadata, Viewport } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'IPsec Analyzer — See through every tunnel',
-  description: 'AI-powered IPsec protocol analysis and security scoring.',
-  generator: 'v0.app',
+  title: 'Cypher Lens — IPsec VPN Security Analyzer & Protocol Auditor',
+  description: 'AI-powered IPsec VPN security auditing, traffic classification, and NIST SP 800-77 risk assessment platform.',
+  generator: 'Antigravity Platform',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/favicon.ico',
   },
 }
 
 export const viewport: Viewport = {
-  colorScheme: 'light dark',
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: 'white' },
-    { media: '(prefers-color-scheme: dark)', color: 'black' },
-  ],
+  colorScheme: 'light',
+  themeColor: '#f6f7fb',
 }
 
 export default function RootLayout({
@@ -40,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased">
+      <body className="bg-[#f6f7fb] text-[#111827] antialiased selection:bg-[#5850ec]/20 selection:text-[#5850ec] overflow-hidden">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
